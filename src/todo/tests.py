@@ -75,7 +75,7 @@ class TestDeleteTodoItem(APITestCase):
 	def test_received_204_no_content_status_code(self):
 		self.assertEqual(self.response.status_code, status.HTTP_204_NO_CONTENT)
 
-	def test_the_item was_deleted(self):
+	def test_the_item_was_deleted(self):
 		self.assertEqual(TodoItem.objects.count(), 0)
 
 class TestDeleteAllItems(APITestCase):
