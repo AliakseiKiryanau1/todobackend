@@ -6,3 +6,8 @@ venv
 
 # Ignore SQLite database files
 *.sqlite3
+
+# Ignore test coverage reports
+.coverage
+coverage.xml
+unittests.xml
