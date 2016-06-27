@@ -1,10 +1,10 @@
 test:
   build: ../../
-  dockerfile: docker/dev/dockerfile
+  dockerfile: docker/dev/Dockerfile
   volumes_from:
-    -cache
+    - cache
   links:
-    -db
+    - db
   environment:
     DJANGO_SETTINGS_MODULE: todobackend.settings.test
     MYSQL_HOST: db
