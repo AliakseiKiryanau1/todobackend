@@ -12,6 +12,16 @@ test:
     MYSQL_PASSWORD: 1234567
     TEST_OUTPUT_DIR: /reports
 
+agent:
+  image: aliakseikiryanau/ansible
+  volumes:
+    - /home/docker/probe.yml:/ansible/probe.yml
+  links:
+    - db
+  environment: 
+    PROBE_HOST: "db"
+    PROBE_PORT: "3306"
+
 db:
   image: mysql:5.6
   hostname: db

@@ -9,7 +9,8 @@ RUN apt-get update && \
 RUN . /appenv/bin/activate && \
 	pip install wheel --upgrade
 
-# PIP environment variables (NOTE: must be set after installing wheel)
+# PIP environment variables (NOTE: mhttp://stackoverflow.com/questions/30040708/how-to-mount-local-volumes-in-docker-machine
+# @see https://github.com/boot2docker/ust be set after installing wheel)
 ENV WHEELHOUSE=/wheelhouse PIP_WHEEL_DIR=/wheelhouse PIP_FIND_LINKS=/wheelhouse XDG_CACHE_HOME=/cache
 
 # OUTPUT: Build artefacts (Wheels) are output here
