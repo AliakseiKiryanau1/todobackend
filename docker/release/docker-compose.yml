@@ -27,7 +27,6 @@ nginx:
   volumes_from:
     - webroot
 
-
 webroot:
   build: ../../
   dockerfile: docker/release/Dockerfile
