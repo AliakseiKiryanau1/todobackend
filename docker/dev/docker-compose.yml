@@ -15,8 +15,6 @@ test:
 builder:
   build: ../../
   dockerfile: docker/dev/Dockerfile
-  volumes:
-    - /home/docker/target:/wheelhouse
   volumes_from:
     - cache
   entrypoint: "entrypoint.sh"
@@ -24,13 +22,12 @@ builder:
 
 agent:
   image: aliakseikiryanau/ansible
-  volumes:
-    - /home/docker/probe.yml:/ansible/probe.yml
   links:
     - db
   environment: 
     PROBE_HOST: "db"
     PROBE_PORT: "3306"
+  command: ["probe.yml"]
 
 db:
   image: mysql:5.6
