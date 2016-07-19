@@ -14,6 +14,15 @@ DEV_PROJECT := $(REL_PROJECT)dev
 # Application Service Name - must match Docker Compose Release specification application service name
 APP_SERVICE_NAME := app
 
+# Build tag expression - can be used to evaluate a shell expression at runtime
+BUILD_TAG_EXPRESSION ?= date -u +%Y%m%d%H%M%S
+
+# Execute shell expression
+BUILD_EXPRESSION := $(shell $(BUILD_TAG_EXPRESSION))
+
+# Build tag - defaults to BUILD_EXPRESSION if not defined
+BUILD_TAG ?= $(BUILD_EXPRESSION)
+
 # Check and Inspect Logic
 INSPECT := $$(docker-compose -p $$1 -f $$2 ps -q $$3 | xargs -I ARGS docker inspect -f "{{ .State.ExitCode }}" ARGS)
 
@@ -24,7 +33,7 @@ CHECK := @bash -c '\
 # Use these settings to specify a custom Docker registry
 DOCKER_REGISTRY ?= docker.io
 
-.PHONY: test build release clean tag
+.PHONY: test build release clean tag buildtag
 
 test:
 	${INFO} "Pulling latest images..."
@@ -85,6 +94,11 @@ tag:
 	@ $(foreach tag,$(TAG_ARGS), docker tag $(IMAGE_ID) $(DOCKER_REGISTRY)/$(ORG_NAME)/$(REPO_NAME):$(tag);)
 	${INFO} "Tagging complete"
 
+buildtag:
+	${INFO} "Tagging release image with suffix $(BUILD_TAG) and build tags $(BUILDTAG_ARGS)..."
+	@ $(foreach tag,$(BUILDTAG_ARGS), docker tag $(IMAGE_ID) $(DOCKER_REGISTRY)/$(ORG_NAME)/$(REPO_NAME):$(tag).$(BUILD_TAG);)
+	${INFO} "Tagging complete"
+
 # Cosmetics
 YELLOW := "\e[1;33m"
 NC := "\e[0m"
@@ -104,9 +118,9 @@ IMAGE_ID := $$(docker inspect -f '{{ .Image }}' $(APP_CONTAINER_ID))
 
 # Extract tag arguments
 ifeq (tag,$(firstword $(MAKECMDGOALS)))
-	TAG_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-    ifeq ($(TAG_ARGS),)
-		$(error You must specify a tag)
-    endif
-	$(eval $(TAG_ARGS):;@:)
+  TAG_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  ifeq ($(TAG_ARGS),)
+    $(error You must specify a tag)
+  endif
+  $(eval $(TAG_ARGS):;@:)
 endif
