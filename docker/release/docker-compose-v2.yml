@@ -17,7 +17,7 @@ services:
       DJANGO_SETTINGS_MODULE: todobackend.settings.release
       MYSQL_HOST: db
       MYSQL_USER: todo
-      MYSQL_PASSWORD: 1234567
+      MYSQL_PASSWORD: 12345678
     command:
       - uwsgi
       - "--socket /var/www/todobackend/todobackend.sock"
@@ -54,8 +54,8 @@ services:
     environment:
       MYSQL_DATABASE: todobackend
       MYSQL_USER: todo
-      MYSQL_PASSWORD: 1234567
-      MYSQL_ROOT_PASSWORD: 1234567
+      MYSQL_PASSWORD: 12345678
+      MYSQL_ROOT_PASSWORD: 12345678
 
   agent:
     image: aliakseikiryanau/ansible
